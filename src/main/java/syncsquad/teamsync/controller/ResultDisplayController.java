@@ -15,6 +15,12 @@ public class ResultDisplayController extends UiPart<Region> {
     @FXML
     private TextArea resultDisplay;
 
+    /**
+     * Controller for the result display in the application.
+     * It binds the text property of the result display to the feedback property of the view model.
+     *
+     * @param viewModel The view model that provides feedback to the user.
+     */
     public ResultDisplayController(ResultDisplayViewModel viewModel) {
         super(FXML);
 
