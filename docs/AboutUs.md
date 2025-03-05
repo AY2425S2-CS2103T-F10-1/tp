@@ -58,3 +58,13 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 * Role: Developer
 * Responsibilities: Java Programmer
+
+### Kerk Tai Heng
+
+<img src="images/kerktaiheng.png" width="200px">
+
+[[github](http://github.com/kerktaiheng)]
+[[portfolio](team/kerktaiheng.md)]
+
+* Role: Developer
+* Responsibilities: Team Clown
