@@ -65,10 +65,14 @@ dependencies {
     testImplementation group: 'org.mockito', name: 'mockito-core', version: mockitoVersion
 
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: jUnitVersion
+
+    implementation 'io.github.mkpaz:atlantafx-base:2.0.0'
+    implementation 'org.kordamp.ikonli:ikonli-javafx:12.3.1'
+    implementation 'org.kordamp.ikonli:ikonli-material2-pack:12.3.1'
 }
 
 shadowJar {
-    archiveFileName = 'addressbook.jar'
+    archiveFileName = 'teamsync.jar'
 }
 
 defaultTasks 'clean', 'test'

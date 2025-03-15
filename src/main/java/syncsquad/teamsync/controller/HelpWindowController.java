@@ -2,12 +2,19 @@ package syncsquad.teamsync.controller;
 
 import java.util.logging.Logger;
 
+import org.kordamp.ikonli.javafx.FontIcon;
+import org.kordamp.ikonli.material2.Material2AL;
+
+import atlantafx.base.theme.Styles;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import syncsquad.teamsync.commons.core.LogsCenter;
 
 /**
@@ -22,6 +29,15 @@ public class HelpWindowController extends UiPart<Stage> {
     private static final String FXML = "HelpWindow.fxml";
 
     @FXML
+    private VBox mainVBox;
+
+    private double xOffset = 0;
+    private double yOffset = 0;
+
+    @FXML
+    private Button closeButton;
+
+    @FXML
     private Button copyButton;
 
     @FXML
@@ -34,7 +50,22 @@ public class HelpWindowController extends UiPart<Stage> {
      */
     public HelpWindowController(Stage root) {
         super(FXML, root);
+        root.initStyle(StageStyle.UNDECORATED);
         helpMessage.setText(HELP_MESSAGE);
+
+        FontIcon closeIcon = new FontIcon(Material2AL.CLOSE);
+        closeButton.setGraphic(closeIcon);
+        closeButton.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.FLAT, Styles.ACCENT);
+
+        this.mainVBox.setOnMousePressed((MouseEvent event) -> {
+            xOffset = event.getSceneX();
+            yOffset = event.getSceneY();
+        });
+
+        this.mainVBox.setOnMouseDragged((MouseEvent event) -> {
+            root.setX(event.getScreenX() - xOffset);
+            root.setY(event.getScreenY() - yOffset);
+        });
     }
 
     /**

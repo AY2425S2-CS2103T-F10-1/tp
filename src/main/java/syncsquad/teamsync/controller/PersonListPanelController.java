@@ -1,6 +1,8 @@
 package syncsquad.teamsync.controller;
 
+import atlantafx.base.theme.Styles;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Region;
@@ -23,6 +25,9 @@ public class PersonListPanelController extends UiPart<Region> {
         super(FXML);
         personListView.setItems(viewModel.personListProperty());
         personListView.setCellFactory(listView -> new PersonListViewCell());
+        personListView.getStyleClass().addAll(
+                Styles.STRIPED
+        );
     }
 
     /**
@@ -38,6 +43,7 @@ public class PersonListPanelController extends UiPart<Region> {
                 setText(null);
             } else {
                 setGraphic(new PersonCardController(person, getIndex() + 1).getRoot());
+                setPadding(new Insets(10));
             }
         }
     }

@@ -2,7 +2,13 @@ package syncsquad.teamsync.controller;
 
 import java.util.Comparator;
 
+import org.kordamp.ikonli.javafx.FontIcon;
+import org.kordamp.ikonli.material2.Material2AL;
+import org.kordamp.ikonli.material2.Material2MZ;
+
+import atlantafx.base.theme.Styles;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
@@ -50,15 +56,40 @@ public class PersonCardController extends UiPart<Region> {
         super(FXML);
         this.person = person;
         id.setText(displayedIndex + ". ");
+        id.getStyleClass().add(Styles.TITLE_2);
+
         name.setText(person.getName().fullName);
+        name.getStyleClass().add(Styles.TITLE_2);
+
         phone.setText(person.getPhone().value);
+        FontIcon phoneIcon = new FontIcon(Material2MZ.PHONE);
+        phone.setGraphic(phoneIcon);
+
         address.setText(person.getAddress().value);
+        FontIcon addressIcon = new FontIcon(Material2AL.HOME);
+        address.setGraphic(addressIcon);
+
         email.setText(person.getEmail().value);
+        FontIcon emailIcon = new FontIcon(Material2MZ.MAIL);
+        email.setGraphic(emailIcon);
+
         StringBuilder moduleList = new StringBuilder();
         person.getModules().forEach(moduleList::append);
-        modules.setText("Modules: " + moduleList.toString());
+        modules.setText(moduleList.toString());
+        FontIcon moduleIcon = new FontIcon(Material2AL.BOOK);
+        modules.setGraphic(moduleIcon);
+
         person.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
-                .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
+                .forEach(tag -> {
+                    Label tagLabel = new Label(tag.tagName);
+                    tagLabel.getStyleClass().addAll(
+                            Styles.TEXT_CAPTION,
+                            Styles.BG_SUCCESS_EMPHASIS,
+                            Styles.TEXT_ON_EMPHASIS
+                    );
+                    tagLabel.setPadding(new Insets(2));
+                    tags.getChildren().add(tagLabel);
+                });
     }
 }

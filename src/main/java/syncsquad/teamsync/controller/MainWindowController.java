@@ -1,12 +1,20 @@
 package syncsquad.teamsync.controller;
 
+import org.kordamp.ikonli.javafx.FontIcon;
+import org.kordamp.ikonli.material2.Material2AL;
+
+import atlantafx.base.theme.Styles;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import syncsquad.teamsync.commons.core.GuiSettings;
 import syncsquad.teamsync.logic.Logic;
@@ -28,6 +36,15 @@ public class MainWindowController extends UiPart<Stage> {
     private MainViewModel viewModel;
 
     @FXML
+    private VBox mainVBox;
+
+    private double xOffset = 0;
+    private double yOffset = 0;
+
+    @FXML
+    private MenuBar menuBar;
+
+    @FXML
     private StackPane commandBoxPlaceholder;
 
     @FXML
@@ -41,6 +58,9 @@ public class MainWindowController extends UiPart<Stage> {
 
     @FXML
     private StackPane statusbarPlaceholder;
+
+    @FXML
+    private Button closeButton;
 
     /**
      * Creates a {@code MainWindow} with the given {@code Stage} and {@code Logic}.
@@ -63,6 +83,22 @@ public class MainWindowController extends UiPart<Stage> {
 
         this.viewModel.getIsShowingHelpProperty().addListener((unused1) -> handleHelp());
         this.viewModel.getIsExiting().addListener((unused1) -> handleExit());
+
+        menuBar.getStyleClass().add(Styles.BG_ACCENT_SUBTLE);
+
+        FontIcon closeIcon = new FontIcon(Material2AL.CLOSE);
+        closeButton.setGraphic(closeIcon);
+        closeButton.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.FLAT, Styles.ACCENT);
+
+        this.mainVBox.setOnMousePressed((MouseEvent event) -> {
+            xOffset = event.getSceneX();
+            yOffset = event.getSceneY();
+        });
+
+        this.mainVBox.setOnMouseDragged((MouseEvent event) -> {
+            primaryStage.setX(event.getScreenX() - xOffset);
+            primaryStage.setY(event.getScreenY() - yOffset);
+        });
     }
 
     public Stage getPrimaryStage() {
