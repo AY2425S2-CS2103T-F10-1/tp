@@ -104,6 +104,12 @@ public interface Model {
      */
     void deleteMeeting(Meeting meeting);
 
+    /**
+     * Edits the given meeting with another meeting.
+     * The meeting must exist in the address book.
+     */
+    void editMeeting(Meeting meeting, Meeting newMeeting);
+
     /** Returns an unmodifiable view of the list of meetings */
     ObservableList<Meeting> getMeetingList();
 }
