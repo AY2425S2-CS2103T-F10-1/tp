@@ -6,6 +6,7 @@
 
 Package " "<<Rectangle>>{
     Class UI UI_COLOR
+    Class ViewModel UI_COLOR_T1
     Class Logic LOGIC_COLOR
     Class Storage STORAGE_COLOR
     Class Model MODEL_COLOR
@@ -16,9 +17,9 @@ Package " "<<Rectangle>>{
 Class "<$user>" as User MODEL_COLOR_T2
 Class "<$documents>" as File UI_COLOR_T1
 
-
-UI -[#green]> Logic
-UI -right[#green]-> Model
+UI -[#green]> ViewModel
+ViewModel -[#green]> Logic
+ViewModel -right[#green]-> Model
 Logic -[#blue]-> Storage
 Logic -down[#blue]-> Model
 Main -[#grey]-> UI
@@ -30,4 +31,11 @@ Main -down[hidden]-> Commons
 Storage -up[STORAGE_COLOR].> Model
 Storage .right[STORAGE_COLOR].>File
 User ..> UI
+
+note right of ViewModel
+  ViewModel layer:
+  - Manages UI state
+  - Handles data binding
+  - Converts between UI and Model
+end note
 @enduml
