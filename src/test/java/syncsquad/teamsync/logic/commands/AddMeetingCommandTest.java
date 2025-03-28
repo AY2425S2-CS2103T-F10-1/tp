@@ -22,6 +22,7 @@ import syncsquad.teamsync.model.Model;
 import syncsquad.teamsync.model.ReadOnlyAddressBook;
 import syncsquad.teamsync.model.ReadOnlyUserPrefs;
 import syncsquad.teamsync.model.meeting.Meeting;
+import syncsquad.teamsync.model.meeting.UniqueMeetingList;
 import syncsquad.teamsync.model.person.Person;
 import syncsquad.teamsync.testutil.MeetingBuilder;
 
@@ -203,7 +204,8 @@ public class AddMeetingCommandTest {
      * A Model stub that always accept the meeting being added.
      */
     private class ModelStubAcceptingMeetingAdded extends AddMeetingCommandTest.ModelStub {
-        final ArrayList<Meeting> meetingsAdded = new ArrayList<>();
+        final UniqueMeetingList meetings = new UniqueMeetingList();
+        final ArrayList meetingsAdded = new ArrayList<>();
 
         @Override
         public boolean hasMeeting(Meeting meeting) {
@@ -215,6 +217,11 @@ public class AddMeetingCommandTest {
         public void addMeeting(Meeting meeting) {
             requireNonNull(meeting);
             meetingsAdded.add(meeting);
+        }
+
+        @Override
+        public ObservableList<Meeting> getMeetingList() {
+            return meetings.asUnmodifiableObservableList();
         }
 
         @Override

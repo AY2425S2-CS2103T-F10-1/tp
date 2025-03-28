@@ -1,6 +1,10 @@
 package syncsquad.teamsync.logic.parser;
 
 import static syncsquad.teamsync.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static syncsquad.teamsync.logic.Messages.MESSAGE_INVALID_START_END_TIME;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 import syncsquad.teamsync.logic.commands.AddMeetingCommand;
 import syncsquad.teamsync.logic.parser.exceptions.ParseException;
@@ -30,13 +34,15 @@ public class AddMeetingCommandParser implements Parser<AddMeetingCommand> {
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddMeetingCommand.MESSAGE_USAGE));
         }
 
-        String date = dateTimeSplit[0];
-        String startTime = dateTimeSplit[1];
-        String endTime = dateTimeSplit[2];
+        LocalDate date = ParserUtil.parseDate(dateTimeSplit[0]);
+        LocalTime startTime = ParserUtil.parseTime(dateTimeSplit[1]);
+        LocalTime endTime = ParserUtil.parseTime(dateTimeSplit[2]);
 
-        Meeting meeting = new Meeting(ParserUtil.parseDate(date), ParserUtil.parseTime(startTime),
-                ParserUtil.parseTime(endTime));
+        if (!endTime.isAfter(startTime)) {
+            throw new ParseException(MESSAGE_INVALID_START_END_TIME);
+        }
 
+        Meeting meeting = new Meeting(date, startTime, endTime);
         return new AddMeetingCommand(meeting);
     }
 }
