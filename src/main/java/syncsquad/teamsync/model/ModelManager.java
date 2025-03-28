@@ -131,6 +131,12 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public void editMeeting(Meeting target, Meeting newMeeting) {
+        addressBook.removeMeeting(target);
+        addressBook.addMeeting(newMeeting);
+    }
+
+    @Override
     public ObservableList<Meeting> getMeetingList() {
         return meetings;
     }

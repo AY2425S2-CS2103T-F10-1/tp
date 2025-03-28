@@ -176,6 +176,11 @@ public class AddPersonCommandTest {
         }
 
         @Override
+        public void editMeeting(Meeting meeting, Meeting newMeeting) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public ObservableList<Meeting> getMeetingList() {
             throw new AssertionError("This method should not be called.");
         }
