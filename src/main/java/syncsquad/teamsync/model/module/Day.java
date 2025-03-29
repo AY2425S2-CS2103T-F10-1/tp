@@ -3,19 +3,17 @@ package syncsquad.teamsync.model.module;
 import static java.util.Objects.requireNonNull;
 import static syncsquad.teamsync.commons.util.AppUtil.checkArgument;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * Represents a Day of the week.
  * Guarantees: immutable; is valid as declared in {@link #isValidDay(String)}
  */
 public class Day {
-
-
     public static final String MESSAGE_CONSTRAINTS =
             "Day should be first 3 letters of the day of week (case insensitive) "
             + "(e.g MON/TUE/sat)";
-    private static final Set<String> VALID_DAYS = Set.of("MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN");
+    public static final List<String> VALID_DAYS = List.of("MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN");
     public final String day;
 
     /**

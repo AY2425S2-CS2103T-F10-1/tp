@@ -7,6 +7,7 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
@@ -15,7 +16,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.stage.Stage?>
 
-<fx:root minHeight="600" minWidth="450" onCloseRequest="#handleExit" title="TeamSync" type="javafx.stage.Stage" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root minHeight="600" minWidth="450" onCloseRequest="#handleExit" title="TeamSync" type="javafx.stage.Stage" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
   <icons>
     <Image url="@/images/logo.png" />
   </icons>
@@ -23,7 +24,7 @@
     <Scene stylesheets="@Root.css">
 
       <VBox fx:id="mainVBox">
-            <HBox alignment="CENTER_LEFT">
+            <HBox fx:id="titleBar" alignment="CENTER_LEFT">
                <children>
                   <ImageView fitHeight="150.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -54,17 +55,31 @@
               </MenuBar>
                   <StackPane alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
                      <children>
-                        <Button fx:id="closeButton" mnemonicParsing="false" onAction="#handleExit" />
+                        <HBox alignment="CENTER_RIGHT" StackPane.alignment="CENTER_RIGHT">
+                           <children>
+                              <Button fx:id="minimizeButton" mnemonicParsing="false" onAction="#handleExit" />
+                              <Button fx:id="maximizeButton" mnemonicParsing="false" onAction="#handleExit" rotate="180.0" />
+                              <Button fx:id="closeButton" mnemonicParsing="false" onAction="#handleExit" />
+                           </children>
+                        </HBox>
                      </children>
                   </StackPane>
                </children>
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
             </HBox>
 
         <VBox fx:id="personList" minWidth="340" prefWidth="340" styleClass="pane-with-border" VBox.vgrow="ALWAYS">
           <padding>
             <Insets bottom="10" left="10" right="10" top="10" />
           </padding>
-          <StackPane fx:id="personListPanelPlaceholder" VBox.vgrow="ALWAYS" />
+               <SplitPane dividerPositions="0.5" VBox.vgrow="ALWAYS">
+                  <items>
+                <StackPane fx:id="personListPanelPlaceholder" />
+                     <StackPane fx:id="timetablePlaceholder" layoutX="10.0" layoutY="10.0" />
+                  </items>
+               </SplitPane>
         </VBox>
 
               <StackPane fx:id="resultDisplayPlaceholder" maxHeight="100" minHeight="100" prefHeight="100" styleClass="pane-with-border" VBox.vgrow="NEVER">
