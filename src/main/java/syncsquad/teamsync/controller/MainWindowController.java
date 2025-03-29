@@ -143,7 +143,7 @@ public class MainWindowController extends UiPart<Stage> {
      * Fills up all the placeholders of this window.
      */
     void fillInnerParts() {
-        PersonListPanelController personListPanel = new PersonListPanelController(
+        PersonTreeViewController personListPanel = new PersonTreeViewController(
             this.viewModel.getPersonListViewModel());
         personListPanelPlaceholder.getChildren().add(personListPanel.getRoot());
 
