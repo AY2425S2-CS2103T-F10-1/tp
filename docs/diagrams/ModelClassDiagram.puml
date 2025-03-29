@@ -13,12 +13,18 @@ Class ModelManager
 Class UserPrefs
 
 Class UniquePersonList
+Class UniqueMeetingList
 Class Person
 Class Address
 Class Email
 Class Name
 Class Phone
 Class Tag
+Class Module
+Class ModuleCode
+Class Day
+Class Meeting
+
 
 Class I #FFFFFF
 }
@@ -42,6 +48,12 @@ Person *--> Phone
 Person *--> Email
 Person *--> Address
 Person *--> "*" Tag
+Person *--> "*" Module
+Module *--> ModuleCode
+Module *--> Day
+
+AddressBook *--> "1" UniqueMeetingList
+UniqueMeetingList --> "~* all" Meeting
 
 Person -[hidden]up--> I
 UniquePersonList -[hidden]right-> I
