@@ -29,7 +29,7 @@ public class AddPersonCommand extends PersonCommand {
             + PREFIX_PHONE + "PHONE "
             + PREFIX_EMAIL + "EMAIL "
             + PREFIX_ADDRESS + "ADDRESS "
-            + "[" + PREFIX_TAG + "TAG]...\n"
+            + "[" + PREFIX_TAG + "TAG]... "
             + "[" + PREFIX_MODULE + "MODULE]...\n"
             + "Example: " + COMMAND_GROUP_WORD + " " + COMMAND_WORD + " "
             + PREFIX_NAME + "John Doe "
