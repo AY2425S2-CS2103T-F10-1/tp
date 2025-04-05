@@ -80,7 +80,7 @@ public class HelpDialogController extends UiPart<Region> {
     private ObservableList<CommandSummary> getCommandSummaryData() {
         return FXCollections.observableArrayList(
                 new CommandSummary("Student", "Add a teammate",
-                        "person add -n NAME -p PHONE_NUMBER -e EMAIL -a ADDRESS [-t TAG]…",
+                        "person add -n NAME -p PHONE_NUMBER -e EMAIL -a ADDRESS [-t TAG]… [-m MODULE]...",
                         "person add -n John Doe -p 98765432 -e johndoe@example.com -a John St. Blk 123, #01-01"),
                 new CommandSummary("Student", "Edit a teammate",
                         "person edit INDEX [-n NAME] [-p PHONE] [-e EMAIL] [-a ADDRESS] [-t TAG]…",
@@ -92,9 +92,9 @@ public class HelpDialogController extends UiPart<Region> {
                 new CommandSummary("Student", "Search for a teammate",
                         "person find KEYWORD [MORE_KEYWORDS]", "person find James Jake"),
                 new CommandSummary("Module", "Add a module for a teammate",
-                        "mod add INDEX MODULE_CODE DAY START_TIME END_TIME", "mod add 1 cs2101 thu 12:00 15:00"),
+                        "module add INDEX MODULE_CODE DAY START_TIME END_TIME", "module add 1 cs2101 thu 12:00 15:00"),
                 new CommandSummary("Module", "Delete a module from a teammate",
-                        "mod delete INDEX MODULE_CODE", "mod delete 1 cs2101"),
+                        "module delete INDEX MODULE_CODE", "module delete 1 cs2101"),
                 new CommandSummary("Meeting", "Add a meeting",
                         "meeting add DATE START_TIME END_TIME", "meeting 27-03-2025 12:00 15:00"),
                 new CommandSummary("Meeting", "Delete a meeting",
