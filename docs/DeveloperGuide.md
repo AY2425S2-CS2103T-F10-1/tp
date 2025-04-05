@@ -658,7 +658,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 1. User chooses a teammate contact to edit
 2. User enters the updated teammate contact details
 3. TeamSync updates the teammate and displays a success message
-4. TeamSync updates display to reflect the deleted teammate
+4. TeamSync updates display to reflect the edited teammate
 
    Use case ends
 
@@ -785,7 +785,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 1. User chooses to create a meeting
 2. User enters the meeting details
 3. TeamSync displays a message that the meeting has been created successfully
-4. TeamSync updates display to reflect the deleted meeting
+4. TeamSync updates display to reflect the created meeting
 
    Use case ends
 
@@ -878,15 +878,21 @@ testers are expected to do more *exploratory* testing.
 
 1. Initial launch
 
-   1. Download the jar file and copy into an empty folder
+   1. Ensure you have Java `17` or above installed in your Computer.<br>
+   **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
 
-   2. Double-click the jar file Expected: Shows the GUI with a set of sample teammates. The window size may not be optimum.
+   1. Download the latest `.jar` file from [here](https://github.com/AY2425S2-CS2103T-F10-1/tp/releases).
+
+   1. Copy the file to the folder you want to use as the _home folder_ for TeamSync.
+
+   1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar TeamSync.jar` command to run the application.<br>
+   A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
 
 1. Saving window preferences
 
    1. Resize the window to an optimum size. Move the window to a different location. Close the window.
 
-   2. Re-launch the app by double-clicking the jar file.<br>
+   2. Re-launch the app by following the above instructions.<br>
       Expected: The most recent window size and location is retained.
 
 ### Teammate
