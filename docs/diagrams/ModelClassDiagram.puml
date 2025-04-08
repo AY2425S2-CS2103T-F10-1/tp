@@ -12,7 +12,7 @@ Class AddressBook
 Class ModelManager
 Class UserPrefs
 
-Class "<<abstract>>\nUniqueItemList" as UniqueItemList
+Class "{abstract}\nUniqueItemList" as UniqueItemList
 Class UniquePersonList
 Class UniqueMeetingList
 
