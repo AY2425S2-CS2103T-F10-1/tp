@@ -48,9 +48,7 @@ public class AddPersonCommand extends PersonCommand {
     private final Person toAdd;
 
     /**
-     * Creates an AddPersonCommand object to add the specified {@code Person}
-     *
-     * @param person Person to be added
+     * Creates an AddCommand to add the specified {@code Person}
      */
     public AddPersonCommand(Person person) {
         requireNonNull(person);
