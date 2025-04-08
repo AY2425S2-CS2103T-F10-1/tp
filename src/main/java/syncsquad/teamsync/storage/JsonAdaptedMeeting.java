@@ -68,6 +68,9 @@ class JsonAdaptedMeeting {
             final LocalDate date = ParserUtil.parseDate(this.date);
             final LocalTime startTime = ParserUtil.parseTime(this.startTime);
             final LocalTime endTime = ParserUtil.parseTime(this.endTime);
+            if (!endTime.isAfter(startTime)) {
+                throw new IllegalValueException(Meeting.MESSAGE_CONSTRAINTS);
+            }
             return new Meeting(date, startTime, endTime);
         } catch (ParseException e) {
             throw new IllegalValueException(Meeting.MESSAGE_CONSTRAINTS);

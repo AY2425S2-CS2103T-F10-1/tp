@@ -30,6 +30,11 @@ public class JsonAdaptedMeetingTest {
     }
 
     @Test
+    public void toModelType_nullMeeting_throwsAssertionError() {
+        assertThrows(AssertionError.class, () -> new JsonAdaptedMeeting(null));
+    }
+
+    @Test
     public void toModelType_invalidDate_throwsIllegalValueException() {
         JsonAdaptedMeeting meeting = new JsonAdaptedMeeting(INVALID_DATE, VALID_START_TIME, VALID_END_TIME);
         String expectedMessage = Meeting.MESSAGE_CONSTRAINTS;
@@ -71,4 +76,11 @@ public class JsonAdaptedMeetingTest {
         assertThrows(IllegalValueException.class, expectedMessage, meeting::toModelType);
     }
 
+    @Test
+    public void toModelType_endTimeBeforeStartTime_throwsIllegalValueException() {
+        JsonAdaptedMeeting adaptedMeeting = new JsonAdaptedMeeting(
+                VALID_DATE, VALID_END_TIME, VALID_START_TIME);
+        String expectedMessage = Meeting.MESSAGE_CONSTRAINTS;
+        assertThrows(IllegalValueException.class, expectedMessage, adaptedMeeting::toModelType);
+    }
 }

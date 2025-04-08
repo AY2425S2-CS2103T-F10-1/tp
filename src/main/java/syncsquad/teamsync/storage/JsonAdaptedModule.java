@@ -1,6 +1,7 @@
 package syncsquad.teamsync.storage;
 
 import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -72,14 +73,22 @@ class JsonAdaptedModule {
             throw new IllegalValueException(String.format(
                     MISSING_FIELD_MESSAGE_FORMAT, "startTime"));
         }
-        final LocalTime startScheduleTime = LocalTime.parse(this.startTime);
 
         if (endTime == null) {
             throw new IllegalValueException(String.format(
                     MISSING_FIELD_MESSAGE_FORMAT, "endTime"));
         }
-        final LocalTime endScheduleTime = LocalTime.parse(this.endTime);
-        return new Module(moduleCode, day, startScheduleTime, endScheduleTime);
+
+        try {
+            final LocalTime startScheduleTime = LocalTime.parse(this.startTime);
+            final LocalTime endScheduleTime = LocalTime.parse(this.endTime);
+            if (!endScheduleTime.isAfter(startScheduleTime)) {
+                throw new IllegalValueException(Module.MESSAGE_CONSTRAINTS);
+            }
+            return new Module(moduleCode, day, startScheduleTime, endScheduleTime);
+        } catch (DateTimeParseException e) {
+            throw new IllegalValueException(Module.MESSAGE_CONSTRAINTS);
+        }
     }
 
 }

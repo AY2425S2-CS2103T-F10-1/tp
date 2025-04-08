@@ -162,9 +162,18 @@ public class TooltipBlock implements TimetableDisplayable {
         public double getDuration() {
             return this.endTime - this.startTime;
         }
+
+        @Override
+        public String toString() {
+            return this.description.split("\n").length + " " + this.startTime + " " + this.endTime;
+        }
     }
 
     private void appendEvent(String day, TooltipEvent event, int insertIndex) {
+        if (event.startTime == event.endTime) {
+            return;
+        }
+
         List<TooltipEvent> events = this.dayEvents.get(day);
         for (int i = insertIndex; i < events.size(); i++) {
             TooltipEvent e = events.get(i);
@@ -187,65 +196,79 @@ public class TooltipBlock implements TimetableDisplayable {
             return;
         }
 
-        if (event.startTime < nextEvent.endTime && event.endTime > nextEvent.endTime) {
+        if (event.startTime <= nextEvent.startTime && nextEvent.endTime <= event.endTime) {
             // E N N E
-            TooltipEvent newEvent = new TooltipEvent(
-                nextEvent.description + "\n" + event.description,
-                event.startTime,
-                nextEvent.endTime);
-            nextEvent.endTime = newEvent.startTime;
-            event.startTime = newEvent.endTime;
-            events.add(insertIndex, newEvent);
-            appendEvent(day, event, insertIndex + 1);
-            return;
-        }
-
-        if (event.startTime < nextEvent.endTime && event.endTime <= nextEvent.endTime) {
-            // E N E N
-            TooltipEvent newEvent = new TooltipEvent(
-                nextEvent.description + "\n" + event.description,
-                event.startTime,
-                event.endTime);
-            TooltipEvent remEvent = new TooltipEvent(
-                nextEvent.description,
-                newEvent.endTime,
-                nextEvent.endTime);
-            nextEvent.endTime = newEvent.startTime;
-            events.add(insertIndex + 1, newEvent);
-            if (remEvent.startTime != remEvent.endTime) {
-                appendEvent(day, remEvent, insertIndex + 1);
-            }
-            return;
-        }
-
-        if (nextEvent.startTime < event.endTime && nextEvent.endTime > event.endTime) {
-            // N E E N
-            TooltipEvent newEvent = new TooltipEvent(
-                nextEvent.description + "\n" + event.description,
-                nextEvent.startTime,
-                event.endTime);
-            event.endTime = newEvent.startTime;
-            nextEvent.startTime = newEvent.endTime;
-            events.add(insertIndex, newEvent);
-            appendEvent(day, event, insertIndex + 1);
-            return;
-        }
-
-        if (nextEvent.startTime < event.endTime && nextEvent.endTime <= event.endTime) {
-            // N E N E
             TooltipEvent newEvent = new TooltipEvent(
                 event.description,
                 event.startTime,
                 nextEvent.startTime);
             nextEvent.description = nextEvent.description + "\n" + event.description;
+            event.startTime = newEvent.endTime;
+            if (newEvent.startTime != newEvent.endTime) {
+                events.add(insertIndex, newEvent);
+            }
+            appendEvent(day, event, insertIndex + 1);
+            return;
+        }
+
+        if (event.startTime <= nextEvent.startTime && event.endTime <= nextEvent.endTime) {
+            // E N E N
+            TooltipEvent newEvent = new TooltipEvent(
+                event.description,
+                event.startTime,
+                nextEvent.startTime);
+            TooltipEvent remEvent = new TooltipEvent(
+                event.description,
+                event.endTime,
+                nextEvent.endTime);
+            nextEvent.description = nextEvent.description + "\n" + event.description;
+            nextEvent.endTime = event.endTime;
+            if (newEvent.startTime != newEvent.endTime) {
+                events.add(insertIndex + 1, newEvent);
+            }
+            appendEvent(day, remEvent, insertIndex + 1);
+            return;
+        }
+
+        if (nextEvent.startTime <= event.startTime && event.endTime <= nextEvent.endTime) {
+            // N E E N
+            TooltipEvent newEvent = new TooltipEvent(
+                nextEvent.description,
+                nextEvent.startTime,
+                event.endTime);
+            TooltipEvent remEvent = new TooltipEvent(
+                nextEvent.description,
+                event.endTime,
+                nextEvent.endTime);
+            nextEvent.description = nextEvent.description + "\n" + event.description;
+            nextEvent.startTime = newEvent.endTime;
+            nextEvent.endTime = remEvent.startTime;
+
+            if (newEvent.startTime != newEvent.endTime) {
+                events.add(insertIndex, newEvent);
+            }
+            appendEvent(day, event, insertIndex + 1);
+            return;
+        }
+
+        if (nextEvent.startTime <= event.startTime && nextEvent.endTime <= event.endTime) {
+            // N E N E
+            TooltipEvent newEvent = new TooltipEvent(
+                nextEvent.description,
+                nextEvent.startTime,
+                event.startTime);
             TooltipEvent remEvent = new TooltipEvent(
                 event.description,
                 nextEvent.endTime,
                 event.endTime);
-            events.add(insertIndex, newEvent);
-            if (remEvent.startTime != remEvent.endTime) {
-                appendEvent(day, remEvent, insertIndex + 1);
+            nextEvent.description = nextEvent.description + "\n" + event.description;
+            nextEvent.startTime = newEvent.endTime;
+            nextEvent.endTime = remEvent.startTime;
+
+            if (newEvent.startTime != newEvent.endTime) {
+                events.add(insertIndex, newEvent);
             }
+            appendEvent(day, remEvent, insertIndex + 1);
             return;
         }
     }

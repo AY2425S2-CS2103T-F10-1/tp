@@ -12,7 +12,12 @@
     "phone" : "98765432",
     "email" : "johnd@example.com",
     "address" : "311, Clementi Ave 2, #02-25",
-    "modules" : [ ],
+    "modules" : [ {
+      "moduleCode" : "CS2103T",
+      "day" : "FRI",
+      "startTime" : "14:00",
+      "endTime" : "16:00"
+    } ],
     "tags" : [ "owesMoney", "friends" ]
   }, {
     "name" : "Carl Kurz",

@@ -59,6 +59,9 @@ public class EditCommand extends PersonCommand {
     private final EditPersonDescriptor editPersonDescriptor;
 
     /**
+     * Initialises a EditCommand object to edit the person at the
+     * specified {@code index}
+     *
      * @param index                of the person in the filtered person list to edit
      * @param editPersonDescriptor details to edit the person with
      */

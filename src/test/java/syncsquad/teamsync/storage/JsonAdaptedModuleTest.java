@@ -85,4 +85,28 @@ public class JsonAdaptedModuleTest {
                 VALID_MODULE_CODE, VALID_DAY, VALID_START_TIME, null);
         assertThrows(IllegalValueException.class, adaptedModule::toModelType);
     }
+
+    @Test
+    public void toModelType_invalidStartTime_throwsIllegalValueException() {
+        JsonAdaptedModule adaptedModule = new JsonAdaptedModule(
+                VALID_MODULE_CODE, VALID_DAY, "25:00", VALID_END_TIME);
+        String expectedMessage = Module.MESSAGE_CONSTRAINTS;
+        assertThrows(IllegalValueException.class, expectedMessage, adaptedModule::toModelType);
+    }
+
+    @Test
+    public void toModelType_invalidEndTime_throwsIllegalValueException() {
+        JsonAdaptedModule adaptedModule = new JsonAdaptedModule(
+                VALID_MODULE_CODE, VALID_DAY, VALID_START_TIME, "25:00");
+        String expectedMessage = Module.MESSAGE_CONSTRAINTS;
+        assertThrows(IllegalValueException.class, expectedMessage, adaptedModule::toModelType);
+    }
+
+    @Test
+    public void toModelType_endTimeBeforeStartTime_throwsIllegalValueException() {
+        JsonAdaptedModule adaptedModule = new JsonAdaptedModule(
+                VALID_MODULE_CODE, VALID_DAY, VALID_END_TIME, VALID_START_TIME);
+        String expectedMessage = Module.MESSAGE_CONSTRAINTS;
+        assertThrows(IllegalValueException.class, expectedMessage, adaptedModule::toModelType);
+    }
 }

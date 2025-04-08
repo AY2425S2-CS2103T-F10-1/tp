@@ -42,6 +42,8 @@ public class AddModuleCommand extends ModuleCommand {
     private final Module module;
 
     /**
+     * Initialises an AddModuleCommand object to add a module
+     *
      * @param index  of the person in the filtered person list to edit
      * @param module module to add to the person
      */
@@ -83,6 +85,9 @@ public class AddModuleCommand extends ModuleCommand {
 
     /**
      * Checks if the module to be added overlaps with existing modules
+     *
+     * @param moduleSet Set of modules to check for overlap
+     * @return true if there is an overlap, false otherwise
      */
     public boolean hasOverlap(Set<Module> moduleSet) {
         requireNonNull(moduleSet);

@@ -29,7 +29,10 @@ public class DeleteMeetingCommand extends MeetingCommand {
     private final Index targetIndex;
 
     /**
-     * Creates a DeleteMeetingCommand to delete the meeting at the specified {@code targetIndex}
+     * Initialises a DeleteMeetingCommand object to delete the meeting at the
+     * specified {@code targetIndex}
+     *
+     * @param targetIndex Index of meeting to delete
      */
     public DeleteMeetingCommand(Index targetIndex) {
         requireNonNull(targetIndex);
