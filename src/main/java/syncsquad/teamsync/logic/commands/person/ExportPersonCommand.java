@@ -25,14 +25,12 @@ public class ExportPersonCommand extends PersonCommand {
             + "Example: " + COMMAND_GROUP_WORD + " " + COMMAND_WORD + " 1";
 
     public static final String MESSAGE_EXPORT_PERSON_SUCCESS = "Exported person:\n"
-            + COMMAND_GROUP_WORD + " " + AddPersonCommand.COMMAND_WORD + " %1$s";
+        + COMMAND_GROUP_WORD + " " + AddPersonCommand.COMMAND_WORD + " %1$s";
 
     private final Index targetIndex;
 
     /**
-     * Creates an ExportPersonCommand object to export the specified person.
-     *
-     * @param targetIndex Index of the person to export
+     * Creates an ExportPersonCommand to export the specified person.
      */
     public ExportPersonCommand(Index targetIndex) {
         requireNonNull(targetIndex);
