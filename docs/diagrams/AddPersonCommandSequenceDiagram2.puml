@@ -29,7 +29,7 @@ activate ParserUtil LOGIC_COLOR
 ParserUtil -[LOGIC_COLOR]> Name : isValidName(name)
 activate Name MODEL_COLOR
 
-Name --[LOGIC_COLOR]> ParserUtil
+Name --[MODEL_COLOR]> ParserUtil
 deactivate Name
 
 
@@ -43,7 +43,7 @@ activate ParserUtil LOGIC_COLOR
 ParserUtil -[LOGIC_COLOR]> Phone : isValidPhone(phone)
 activate Phone MODEL_COLOR
 
-Phone --[LOGIC_COLOR]> ParserUtil
+Phone --[MODEL_COLOR]> ParserUtil
 deactivate Phone
 
 ParserUtil --[LOGIC_COLOR]> AddPersonCommandParser
@@ -51,16 +51,13 @@ deactivate ParserUtil
 
 
 
-ParserUtil --[LOGIC_COLOR]> AddPersonCommandParser
-deactivate ParserUtil
-
 AddPersonCommandParser -[LOGIC_COLOR]> ParserUtil : parseEmail(email)
 activate ParserUtil LOGIC_COLOR
 
 ParserUtil -[LOGIC_COLOR]> Email : isValidEmail(email)
 activate Email MODEL_COLOR
 
-Email --[LOGIC_COLOR]> ParserUtil
+Email --[MODEL_COLOR]> ParserUtil
 deactivate Email
 
 ParserUtil --[LOGIC_COLOR]> AddPersonCommandParser
@@ -68,8 +65,6 @@ deactivate ParserUtil
 
 
 
-ParserUtil --[LOGIC_COLOR]> AddPersonCommandParser
-deactivate ParserUtil
 
 AddPersonCommandParser -[LOGIC_COLOR]> ParserUtil : parseAddress(address)
 activate ParserUtil LOGIC_COLOR
@@ -77,7 +72,7 @@ activate ParserUtil LOGIC_COLOR
 ParserUtil -[LOGIC_COLOR]> Address : isValidAddress(address)
 activate Address MODEL_COLOR
 
-Address --[LOGIC_COLOR]> ParserUtil
+Address --[MODEL_COLOR]> ParserUtil
 deactivate Address
 
 ParserUtil --[LOGIC_COLOR]> AddPersonCommandParser
@@ -85,16 +80,13 @@ deactivate ParserUtil
 
 
 
-ParserUtil --[LOGIC_COLOR]> AddPersonCommandParser
-deactivate ParserUtil
-
 AddPersonCommandParser -[LOGIC_COLOR]> ParserUtil : parseTags(tags)
 activate ParserUtil LOGIC_COLOR
 
 ParserUtil -[LOGIC_COLOR]> Tag : isValidTag(tag)
 activate Tag MODEL_COLOR
 
-Tag --[LOGIC_COLOR]> ParserUtil
+Tag --[MODEL_COLOR]> ParserUtil
 deactivate Tag
 
 ParserUtil --[LOGIC_COLOR]> AddPersonCommandParser
@@ -102,22 +94,19 @@ deactivate ParserUtil
 
 
 
-ParserUtil --[LOGIC_COLOR]> AddPersonCommandParser
-deactivate ParserUtil
-
 AddPersonCommandParser -[LOGIC_COLOR]> ParserUtil : parseModules(modules)
 activate ParserUtil LOGIC_COLOR
 
 ParserUtil -[LOGIC_COLOR]> ModuleCode : isValidModuleCode(moduleCode)
 activate ModuleCode MODEL_COLOR
 
-ModuleCode --[LOGIC_COLOR]> ParserUtil
+ModuleCode --[MODEL_COLOR]> ParserUtil
 deactivate ModuleCode
 
 ParserUtil -[LOGIC_COLOR]> Day : isValidDay(day)
 activate Day MODEL_COLOR
 
-Day --[LOGIC_COLOR]> ParserUtil
+Day --[MODEL_COLOR]> ParserUtil
 deactivate Day
 
 ParserUtil --[LOGIC_COLOR]> AddPersonCommandParser

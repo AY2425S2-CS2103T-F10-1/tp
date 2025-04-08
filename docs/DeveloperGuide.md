@@ -140,7 +140,6 @@ The ViewModel component consists of several specialized view models:
 - **`ResultDisplayViewModel`**: Manages the display of command results and feedback messages.
 - **`PersonListViewModel`**: Handles the presentation logic for the person list, including filtering and sorting.
 - **`MeetingListViewModel`**: Manages the display and state of meetings, including scheduling and conflicts.
-- **`CurrentWeekViewModel`**: Handles the display of the current week's schedule and time-related information.
 
 Each view model:
 
@@ -733,6 +732,11 @@ The following use cases have been implemented.
 
     Use case ends
 
+- 1c. TeamSync detects that the edit will cause there to be duplicate teammates.
+   - 1c1. TeamSync displays an error message.
+
+     Use case ends
+
 #### Use case: UC 06 - Find a teammate by name
 
 **System**: TeamSync
@@ -790,6 +794,11 @@ The following use cases have been implemented.
     - 1c1. TeamSync displays an error message.
 
       Use case ends.
+
+- 1d. TeamSync detects that the module being added is a duplicate.
+   - 1d1. TeamSync displays an error message.
+
+     Use case ends.
 
 #### Use case: UC 09 - Delete a module from a teammate
 
