@@ -44,18 +44,19 @@ dependencies {
     String jUnitVersion = '5.4.0'
     String javaFxVersion = '17.0.7'
     String mockitoVersion = '5.16.0'
+    String macClassifier = System.getProperty('os.arch') == 'aarch64' ? 'mac-aarch64' : 'mac'
 
     implementation group: 'org.openjfx', name: 'javafx-base', version: javaFxVersion, classifier: 'win'
-    implementation group: 'org.openjfx', name: 'javafx-base', version: javaFxVersion, classifier: 'mac'
+    implementation group: 'org.openjfx', name: 'javafx-base', version: javaFxVersion, classifier: macClassifier
     implementation group: 'org.openjfx', name: 'javafx-base', version: javaFxVersion, classifier: 'linux'
     implementation group: 'org.openjfx', name: 'javafx-controls', version: javaFxVersion, classifier: 'win'
-    implementation group: 'org.openjfx', name: 'javafx-controls', version: javaFxVersion, classifier: 'mac'
+    implementation group: 'org.openjfx', name: 'javafx-controls', version: javaFxVersion, classifier: macClassifier
     implementation group: 'org.openjfx', name: 'javafx-controls', version: javaFxVersion, classifier: 'linux'
     implementation group: 'org.openjfx', name: 'javafx-fxml', version: javaFxVersion, classifier: 'win'
-    implementation group: 'org.openjfx', name: 'javafx-fxml', version: javaFxVersion, classifier: 'mac'
+    implementation group: 'org.openjfx', name: 'javafx-fxml', version: javaFxVersion, classifier: macClassifier
     implementation group: 'org.openjfx', name: 'javafx-fxml', version: javaFxVersion, classifier: 'linux'
     implementation group: 'org.openjfx', name: 'javafx-graphics', version: javaFxVersion, classifier: 'win'
-    implementation group: 'org.openjfx', name: 'javafx-graphics', version: javaFxVersion, classifier: 'mac'
+    implementation group: 'org.openjfx', name: 'javafx-graphics', version: javaFxVersion, classifier: macClassifier
     implementation group: 'org.openjfx', name: 'javafx-graphics', version: javaFxVersion, classifier: 'linux'
 
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.7.0'
