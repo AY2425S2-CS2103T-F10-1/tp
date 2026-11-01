@@ -182,7 +182,6 @@ public class MainApp extends Application {
         Application.setUserAgentStylesheet(new Dracula().getUserAgentStylesheet());
         primaryStage.initStyle(StageStyle.UNDECORATED);
         ui.start(primaryStage);
-        ResizeHelper.addResizeListener(primaryStage);
     }
 
     @Override

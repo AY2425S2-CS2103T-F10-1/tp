@@ -1,5 +1,7 @@
 package syncsquad.teamsync;
 
+import java.util.function.BooleanSupplier;
+
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
@@ -19,21 +21,22 @@ import javafx.stage.Stage;
  */
 public class ResizeHelper {
 
-    public static void addResizeListener(Stage stage) {
-        addResizeListener(stage, 0, 0, Double.MAX_VALUE, Double.MAX_VALUE);
+    public static void addResizeListener(Stage stage, BooleanSupplier isMaximized) {
+        addResizeListener(stage, isMaximized, 0, 0, Double.MAX_VALUE, Double.MAX_VALUE);
     }
 
     /**
      * Adds a resize listener to the given stage.
      * @param stage
+     * @param isMaximized whether the stage is maximized, in which case it is not resized
      * @param minWidth
      * @param minHeight
      * @param maxWidth
      * @param maxHeight
      */
-    public static void addResizeListener(Stage stage, double minWidth, double minHeight,
-                                        double maxWidth, double maxHeight) {
-        ResizeListener resizeListener = new ResizeListener(stage);
+    public static void addResizeListener(Stage stage, BooleanSupplier isMaximized, double minWidth,
+                                        double minHeight, double maxWidth, double maxHeight) {
+        ResizeListener resizeListener = new ResizeListener(stage, isMaximized);
         stage.getScene().addEventHandler(MouseEvent.MOUSE_MOVED, resizeListener);
         stage.getScene().addEventHandler(MouseEvent.MOUSE_PRESSED, resizeListener);
         stage.getScene().addEventHandler(MouseEvent.MOUSE_DRAGGED, resizeListener);
@@ -68,6 +71,7 @@ public class ResizeHelper {
 
     static class ResizeListener implements EventHandler<MouseEvent> {
         private Stage stage;
+        private BooleanSupplier isMaximized;
         private Cursor cursorEvent = Cursor.DEFAULT;
         private int border = 4;
         private double startX = 0;
@@ -79,8 +83,9 @@ public class ResizeHelper {
         private double minHeight;
         private double maxHeight;
 
-        public ResizeListener(Stage stage) {
+        public ResizeListener(Stage stage, BooleanSupplier isMaximized) {
             this.stage = stage;
+            this.isMaximized = isMaximized;
         }
 
         public void setMinWidth(double minWidth) {
@@ -101,7 +106,7 @@ public class ResizeHelper {
 
         @Override
         public void handle(MouseEvent mouseEvent) {
-            if (stage.isMaximized()) {
+            if (isMaximized.getAsBoolean()) {
                 return;
             }
             EventType<? extends MouseEvent> mouseEventType = mouseEvent.getEventType();

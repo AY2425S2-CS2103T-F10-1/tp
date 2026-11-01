@@ -89,13 +89,10 @@ public class TitleBarController extends UiPart<Region> {
         FontIcon maximizeIcon = new FontIcon(Material2AL.CHECK_BOX_OUTLINE_BLANK);
         FontIcon restoreIcon = new FontIcon(Material2AL.FILTER_NONE);
         maximizeButton.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.FLAT, Styles.ACCENT);
-        maximizeButton.setGraphic(primaryStage.isMaximized() ? restoreIcon : maximizeIcon);
-        maximizeButton.setOnAction(event -> {
-            boolean isNowMaximized = !primaryStage.isMaximized();
-            primaryStage.setMaximized(isNowMaximized);
-        });
+        maximizeButton.setGraphic(mainWindow.isMaximizedProperty().get() ? restoreIcon : maximizeIcon);
+        maximizeButton.setOnAction(event -> mainWindow.setMaximized(!mainWindow.isMaximizedProperty().get()));
 
-        primaryStage.maximizedProperty().addListener((unused1, oldValue, newValue) -> {
+        mainWindow.isMaximizedProperty().addListener((unused1, oldValue, newValue) -> {
             if (newValue) {
                 maximizeButton.setGraphic(restoreIcon);
             } else {
@@ -110,8 +107,8 @@ public class TitleBarController extends UiPart<Region> {
         });
 
         this.titleBar.setOnMouseDragged((MouseEvent event) -> {
-            if (primaryStage.isMaximized()) {
-                primaryStage.setMaximized(false);
+            if (mainWindow.isMaximizedProperty().get()) {
+                mainWindow.setMaximized(false);
                 xOffset = primaryStage.getWidth() / 2;
             }
             primaryStage.setX(event.getScreenX() - xOffset);
@@ -137,8 +134,8 @@ public class TitleBarController extends UiPart<Region> {
         MainViewModel viewModel = mainWindow.getViewModel();
         double verticalDividerPosition = mainWindow.getVerticalDividerPosition();
         double horizontalDividerPosition = mainWindow.getHorizontalDividerPosition();
-        boolean wasMaximized = primaryStage.isMaximized();
-        primaryStage.setMaximized(false);
+        boolean wasMaximized = mainWindow.isMaximizedProperty().get();
+        mainWindow.setMaximized(false);
         GuiSettings guiSettings = new GuiSettings(primaryStage.getWidth(), primaryStage.getHeight(),
                 (int) primaryStage.getX(), (int) primaryStage.getY(),
                 verticalDividerPosition, horizontalDividerPosition, wasMaximized);

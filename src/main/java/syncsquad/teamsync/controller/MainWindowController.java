@@ -4,11 +4,17 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import atlantafx.base.controls.ModalPane;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
+import syncsquad.teamsync.ResizeHelper;
 import syncsquad.teamsync.commons.core.GuiSettings;
 import syncsquad.teamsync.viewmodel.MainViewModel;
 
@@ -21,6 +27,10 @@ public class MainWindowController extends UiPart<Stage> {
     private static final String FXML = "MainWindow.fxml";
 
     private Stage primaryStage;
+
+    // Tracked here instead of Stage#maximizedProperty, which is unreliable for undecorated stages
+    private final BooleanProperty isMaximized = new SimpleBooleanProperty(false);
+    private Rectangle2D restoredBounds;
 
     // Independent Ui parts residing in this Ui container
     private MainViewModel viewModel;
@@ -90,6 +100,38 @@ public class MainWindowController extends UiPart<Stage> {
     }
 
     /**
+     * Returns whether the window is maximized.
+     */
+    protected ReadOnlyBooleanProperty isMaximizedProperty() {
+        return isMaximized;
+    }
+
+    /**
+     * Maximizes the window to fill its screen, or restores it to its size and position before maximizing.
+     * {@code Stage#setMaximized} is not used because it does not work for undecorated stages on macOS
+     * (JDK-8255835) and reports a wrong maximized state there.
+     */
+    protected void setMaximized(boolean maximized) {
+        if (maximized == isMaximized.get()) {
+            return;
+        }
+        Rectangle2D bounds;
+        if (maximized) {
+            restoredBounds = new Rectangle2D(primaryStage.getX(), primaryStage.getY(),
+                    primaryStage.getWidth(), primaryStage.getHeight());
+            bounds = Screen.getScreensForRectangle(restoredBounds).stream().findFirst()
+                    .orElse(Screen.getPrimary()).getVisualBounds();
+        } else {
+            bounds = restoredBounds;
+        }
+        primaryStage.setX(bounds.getMinX());
+        primaryStage.setY(bounds.getMinY());
+        primaryStage.setWidth(bounds.getWidth());
+        primaryStage.setHeight(bounds.getHeight());
+        isMaximized.set(maximized);
+    }
+
+    /**
      * Returns the main view model associated with this controller.
      *
      * @return The main view model.
@@ -153,6 +195,8 @@ public class MainWindowController extends UiPart<Stage> {
         CommandBoxController commandBox = new CommandBoxController(
             this.viewModel.getCommandBoxViewModel());
         commandBoxPlaceholder.getChildren().add(commandBox.getRoot());
+
+        ResizeHelper.addResizeListener(primaryStage, isMaximized::get);
     }
 
     /**
@@ -177,7 +221,7 @@ public class MainWindowController extends UiPart<Stage> {
             primaryStage.setX(guiSettings.getWindowCoordinates().getX());
             primaryStage.setY(guiSettings.getWindowCoordinates().getY());
         }
-        primaryStage.setMaximized(guiSettings.getIsMaximized());
+        setMaximized(guiSettings.getIsMaximized());
         verticalSplitPane.setDividerPositions(guiSettings.getVerticalDividerPosition());
         horizontalSplitPane.setDividerPositions(guiSettings.getHorizontalDividerPosition());
     }
@@ -192,8 +236,8 @@ public class MainWindowController extends UiPart<Stage> {
      */
     @FXML
     private void handleExit() {
-        boolean wasMaximized = primaryStage.isMaximized();
-        primaryStage.setMaximized(false);
+        boolean wasMaximized = isMaximized.get();
+        setMaximized(false);
         GuiSettings guiSettings = new GuiSettings(primaryStage.getWidth(), primaryStage.getHeight(),
                 (int) primaryStage.getX(), (int) primaryStage.getY(),
                 verticalSplitPane.getDividerPositions()[0], horizontalSplitPane.getDividerPositions()[0],
