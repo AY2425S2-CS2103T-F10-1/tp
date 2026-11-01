@@ -2,15 +2,19 @@ package syncsquad.teamsync.logic.parser.meeting;
 
 import static syncsquad.teamsync.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static syncsquad.teamsync.logic.Messages.MESSAGE_INVALID_START_END_TIME;
+import static syncsquad.teamsync.logic.parser.CliSyntax.PREFIX_TITLE;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 import syncsquad.teamsync.logic.commands.meeting.AddMeetingCommand;
+import syncsquad.teamsync.logic.parser.ArgumentMultimap;
+import syncsquad.teamsync.logic.parser.ArgumentTokenizer;
 import syncsquad.teamsync.logic.parser.Parser;
 import syncsquad.teamsync.logic.parser.ParserUtil;
 import syncsquad.teamsync.logic.parser.exceptions.ParseException;
 import syncsquad.teamsync.model.meeting.Meeting;
+import syncsquad.teamsync.model.meeting.Title;
 
 /**
  * Parses input arguments and creates a new AddMeetingCommand object
@@ -23,7 +27,10 @@ public class AddMeetingCommandParser implements Parser<AddMeetingCommand> {
      * @throws ParseException if the user input does not conform to the expected format.
      */
     public AddMeetingCommand parse(String args) throws ParseException {
-        String trimmedArgs = args.trim();
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(" " + args, PREFIX_TITLE);
+        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_TITLE);
+
+        String trimmedArgs = argMultimap.getPreamble().trim();
         if (trimmedArgs.isEmpty()) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddMeetingCommand.MESSAGE_USAGE));
@@ -44,7 +51,11 @@ public class AddMeetingCommandParser implements Parser<AddMeetingCommand> {
             throw new ParseException(MESSAGE_INVALID_START_END_TIME);
         }
 
-        Meeting meeting = new Meeting(date, startTime, endTime);
+        Title title = argMultimap.getValue(PREFIX_TITLE).isPresent()
+                ? ParserUtil.parseTitle(argMultimap.getValue(PREFIX_TITLE).get())
+                : Title.DEFAULT;
+
+        Meeting meeting = new Meeting(date, startTime, endTime, title);
         return new AddMeetingCommand(meeting);
     }
 }

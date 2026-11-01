@@ -2,6 +2,7 @@ package syncsquad.teamsync.viewmodel;
 
 import java.nio.file.Path;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.logging.Logger;
 
 import javafx.beans.property.BooleanProperty;
@@ -24,6 +25,7 @@ import syncsquad.teamsync.logic.parser.exceptions.ParseException;
  *   <li>{@link ResultDisplayViewModel} - Manages the display of command results.</li>
  *   <li>{@link PersonListViewModel} - Manages the display of the list of persons.</li>
  *   <li>{@link MeetingListViewModel} - Manages the display of the list of meetings.</li>
+ *   <li>{@link ReminderViewModel} - Manages the current time and meeting reminders.</li>
  * </ul>
  *
  * <p>The main responsibilities of this class include:
@@ -40,6 +42,7 @@ public class MainViewModel {
     private final ResultDisplayViewModel resultDisplayViewModel;
     private final PersonListViewModel personListViewModel;
     private final MeetingListViewModel meetingListViewModel;
+    private final ReminderViewModel reminderViewModel;
 
     private final Logger logger = LogsCenter.getLogger(getClass());
 
@@ -69,6 +72,7 @@ public class MainViewModel {
         this.meetingListViewModel = new MeetingListViewModel(
             logic.getMeetingList(),
             logic.getCurrentWeek().currentWeekProperty());
+        this.reminderViewModel = new ReminderViewModel(logic::checkReminders, LocalDateTime.now());
     }
 
     public CommandBoxViewModel getCommandBoxViewModel() {
@@ -85,6 +89,10 @@ public class MainViewModel {
 
     public MeetingListViewModel getMeetingListViewModel() {
         return meetingListViewModel;
+    }
+
+    public ReminderViewModel getReminderViewModel() {
+        return reminderViewModel;
     }
 
     public BooleanProperty getIsShowingHelpProperty() {

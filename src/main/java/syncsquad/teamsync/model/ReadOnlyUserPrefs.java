@@ -13,4 +13,9 @@ public interface ReadOnlyUserPrefs {
 
     Path getAddressBookFilePath();
 
+    /**
+     * Returns how many minutes before a meeting starts its reminder is shown, or 0 if reminders are off.
+     */
+    int getReminderLeadMinutes();
+
 }

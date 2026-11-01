@@ -14,6 +14,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import syncsquad.teamsync.model.meeting.Meeting;
+import syncsquad.teamsync.model.meeting.Title;
 
 /**
  * Unit tests for {@link MeetingListViewModel}.
@@ -44,7 +45,7 @@ public class MeetingListViewModelTest {
         LocalDate date = LocalDate.now();
         LocalTime startTime = LocalTime.of(9, 0);
         LocalTime endTime = LocalTime.of(10, 0);
-        Meeting meeting = new Meeting(date, startTime, endTime);
+        Meeting meeting = new Meeting(date, startTime, endTime, Title.DEFAULT);
 
         // Add meeting to the source list
         meetingList.add(meeting);

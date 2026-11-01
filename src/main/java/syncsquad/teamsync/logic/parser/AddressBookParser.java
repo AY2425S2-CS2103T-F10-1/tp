@@ -12,6 +12,7 @@ import syncsquad.teamsync.logic.commands.ClearCommand;
 import syncsquad.teamsync.logic.commands.Command;
 import syncsquad.teamsync.logic.commands.ExitCommand;
 import syncsquad.teamsync.logic.commands.HelpCommand;
+import syncsquad.teamsync.logic.commands.ReminderCommand;
 import syncsquad.teamsync.logic.commands.ShowDateCommand;
 import syncsquad.teamsync.logic.commands.meeting.MeetingCommand;
 import syncsquad.teamsync.logic.commands.module.ModuleCommand;
@@ -77,6 +78,9 @@ public class AddressBookParser {
 
         case ShowDateCommand.COMMAND_WORD:
             return new ShowDateCommandParser().parse(arguments);
+
+        case ReminderCommand.COMMAND_WORD:
+            return new ReminderCommandParser().parse(arguments);
 
         default:
             logger.finer("This user input caused a ParseException: " + userInput);

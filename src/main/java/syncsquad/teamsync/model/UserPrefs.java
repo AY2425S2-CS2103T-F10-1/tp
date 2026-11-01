@@ -1,6 +1,7 @@
 package syncsquad.teamsync.model;
 
 import static java.util.Objects.requireNonNull;
+import static syncsquad.teamsync.commons.util.AppUtil.checkArgument;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -13,8 +14,11 @@ import syncsquad.teamsync.commons.core.GuiSettings;
  */
 public class UserPrefs implements ReadOnlyUserPrefs {
 
+    public static final int DEFAULT_REMINDER_LEAD_MINUTES = 15;
+
     private GuiSettings guiSettings = new GuiSettings();
     private Path addressBookFilePath = Paths.get("data" , "teamsync.json");
+    private int reminderLeadMinutes = DEFAULT_REMINDER_LEAD_MINUTES;
 
     /**
      * Creates a {@code UserPrefs} with default values.
@@ -36,6 +40,7 @@ public class UserPrefs implements ReadOnlyUserPrefs {
         requireNonNull(newUserPrefs);
         setGuiSettings(newUserPrefs.getGuiSettings());
         setAddressBookFilePath(newUserPrefs.getAddressBookFilePath());
+        setReminderLeadMinutes(newUserPrefs.getReminderLeadMinutes());
     }
 
     public GuiSettings getGuiSettings() {
@@ -56,6 +61,18 @@ public class UserPrefs implements ReadOnlyUserPrefs {
         this.addressBookFilePath = addressBookFilePath;
     }
 
+    public int getReminderLeadMinutes() {
+        return reminderLeadMinutes;
+    }
+
+    /**
+     * Sets how many minutes before a meeting starts its reminder is shown. 0 turns reminders off.
+     */
+    public void setReminderLeadMinutes(int reminderLeadMinutes) {
+        checkArgument(reminderLeadMinutes >= 0, "Reminder lead time cannot be negative");
+        this.reminderLeadMinutes = reminderLeadMinutes;
+    }
+
     @Override
     public boolean equals(Object other) {
         if (other == this) {
@@ -69,12 +86,13 @@ public class UserPrefs implements ReadOnlyUserPrefs {
 
         UserPrefs otherUserPrefs = (UserPrefs) other;
         return guiSettings.equals(otherUserPrefs.guiSettings)
-                && addressBookFilePath.equals(otherUserPrefs.addressBookFilePath);
+                && addressBookFilePath.equals(otherUserPrefs.addressBookFilePath)
+                && reminderLeadMinutes == otherUserPrefs.reminderLeadMinutes;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(guiSettings, addressBookFilePath);
+        return Objects.hash(guiSettings, addressBookFilePath, reminderLeadMinutes);
     }
 
     @Override
@@ -82,6 +100,7 @@ public class UserPrefs implements ReadOnlyUserPrefs {
         StringBuilder sb = new StringBuilder();
         sb.append("Gui Settings : " + guiSettings);
         sb.append("\nLocal data file location : " + addressBookFilePath);
+        sb.append("\nReminder lead time (minutes) : " + reminderLeadMinutes);
         return sb.toString();
     }
 

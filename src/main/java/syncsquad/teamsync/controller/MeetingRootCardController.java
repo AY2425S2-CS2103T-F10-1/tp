@@ -25,6 +25,8 @@ public class MeetingRootCardController extends UiPart<Region> {
     @FXML
     private Label id;
     @FXML
+    private Label titleLabel;
+    @FXML
     private Label dateLabel;
     @FXML
     private Label timeLabel;
@@ -40,6 +42,9 @@ public class MeetingRootCardController extends UiPart<Region> {
         super(FXML);
         id.setText(displayedIndex + ". ");
         id.getStyleClass().add(Styles.TITLE_4);
+
+        titleLabel.setText(meeting.getTitle().value);
+        titleLabel.getStyleClass().add(Styles.TITLE_4);
 
         dateLabel.setText(meeting.getDateString());
         dateLabel.getStyleClass().add(Styles.TITLE_4);

@@ -10,6 +10,7 @@ import syncsquad.teamsync.commons.exceptions.IllegalValueException;
 import syncsquad.teamsync.logic.parser.ParserUtil;
 import syncsquad.teamsync.logic.parser.exceptions.ParseException;
 import syncsquad.teamsync.model.meeting.Meeting;
+import syncsquad.teamsync.model.meeting.Title;
 
 /**
  * Jackson-friendly version of {@link Meeting}.
@@ -26,16 +27,19 @@ class JsonAdaptedMeeting {
     private final String date;
     private final String startTime;
     private final String endTime;
+    private final String title;
 
     /**
      * Constructs a {@code JsonAdaptedMeeting} with the given meeting details.
+     * A missing {@code title}, as in data files saved before meetings had titles, becomes {@link Title#DEFAULT}.
      */
     @JsonCreator
     public JsonAdaptedMeeting(@JsonProperty("date") String date, @JsonProperty("start time") String startTime,
-                             @JsonProperty("end time") String endTime) {
+                             @JsonProperty("end time") String endTime, @JsonProperty("title") String title) {
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.title = title;
     }
 
     /**
@@ -46,6 +50,7 @@ class JsonAdaptedMeeting {
         date = source.getDateString();
         startTime = source.getStartTimeString();
         endTime = source.getEndTimeString();
+        title = source.getTitle().value;
     }
 
     /**
@@ -64,6 +69,11 @@ class JsonAdaptedMeeting {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, END_TIME_FIELD));
         }
 
+        if (title != null && !Title.isValidTitle(title)) {
+            throw new IllegalValueException(Title.MESSAGE_CONSTRAINTS);
+        }
+        final Title modelTitle = title == null ? Title.DEFAULT : new Title(title);
+
         try {
             final LocalDate date = ParserUtil.parseDate(this.date);
             final LocalTime startTime = ParserUtil.parseTime(this.startTime);
@@ -71,7 +81,7 @@ class JsonAdaptedMeeting {
             if (!endTime.isAfter(startTime)) {
                 throw new IllegalValueException(Meeting.MESSAGE_CONSTRAINTS);
             }
-            return new Meeting(date, startTime, endTime);
+            return new Meeting(date, startTime, endTime, modelTitle);
         } catch (ParseException e) {
             throw new IllegalValueException(Meeting.MESSAGE_CONSTRAINTS);
         }

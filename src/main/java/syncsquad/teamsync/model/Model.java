@@ -36,6 +36,16 @@ public interface Model {
     void setGuiSettings(GuiSettings guiSettings);
 
     /**
+     * Returns how many minutes before a meeting starts its reminder is shown, or 0 if reminders are off.
+     */
+    int getReminderLeadMinutes();
+
+    /**
+     * Sets how many minutes before a meeting starts its reminder is shown. 0 turns reminders off.
+     */
+    void setReminderLeadMinutes(int reminderLeadMinutes);
+
+    /**
      * Returns the user prefs' address book file path.
      */
     Path getAddressBookFilePath();

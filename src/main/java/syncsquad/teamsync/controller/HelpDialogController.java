@@ -109,13 +109,16 @@ public class HelpDialogController extends UiPart<Region> {
                 new CommandSummary("Delete a module from a teammate",
                         "module delete INDEX MODULE_CODE", "module delete 1 CS2101"),
                 new CommandSummary("Add a meeting",
-                        "meeting add DATE START_TIME END_TIME", "meeting add 06-04-2025 12:00 15:00"),
+                        "meeting add DATE START_TIME END_TIME [-t TITLE]",
+                        "meeting add 06-04-2025 12:00 15:00 -t Sprint planning"),
                 new CommandSummary("Delete a meeting",
                         "meeting delete INDEX", "meeting delete 1"),
                 new CommandSummary("View help",
                         "help", "help"),
                 new CommandSummary("Change week displayed",
                         "showdate DATE", "showdate 03-04-2025"),
+                new CommandSummary("Set meeting reminders",
+                        "reminder MINUTES or reminder off", "reminder 10"),
                 new CommandSummary("Clear all data", "clear", "clear"),
                 new CommandSummary("Exit TeamSync", "exit", "exit"));
     }

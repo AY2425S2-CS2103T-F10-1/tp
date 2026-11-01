@@ -3,6 +3,8 @@ package syncsquad.teamsync.logic;
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javafx.collections.ObservableList;
@@ -34,6 +36,7 @@ public class LogicManager implements Logic {
     private final Model model;
     private final Storage storage;
     private final AddressBookParser addressBookParser;
+    private final ReminderService reminderService = new ReminderService();
 
     /**
      * Constructs a {@code LogicManager} with the given {@code Model} and {@code Storage}.
@@ -96,5 +99,10 @@ public class LogicManager implements Logic {
     @Override
     public TimetableWeek getCurrentWeek() {
         return model.getCurrentWeek();
+    }
+
+    @Override
+    public List<Meeting> checkReminders(LocalDateTime now) {
+        return reminderService.checkReminders(model.getMeetingList(), now, model.getReminderLeadMinutes());
     }
 }

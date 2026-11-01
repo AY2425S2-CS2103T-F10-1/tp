@@ -1,6 +1,8 @@
 package syncsquad.teamsync.logic;
 
 import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.util.List;
 
 import javafx.collections.ObservableList;
 import syncsquad.teamsync.commons.core.GuiSettings;
@@ -54,4 +56,11 @@ public interface Logic {
     void setGuiSettings(GuiSettings guiSettings);
 
     TimetableWeek getCurrentWeek();
+
+    /**
+     * Returns the meetings that are due for a reminder at {@code now} and have not been reminded before.
+     *
+     * @see ReminderService#checkReminders(List, LocalDateTime, int)
+     */
+    List<Meeting> checkReminders(LocalDateTime now);
 }

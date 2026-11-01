@@ -10,6 +10,8 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.util.StringConverter;
 import syncsquad.teamsync.model.module.Day;
 
@@ -26,6 +28,11 @@ public class TimetableChart extends XYChart<Number, String> { // Flip axis types
 
     private ObservableList<MeetingBlock> meetingBlocks = FXCollections.observableArrayList();
     private TooltipBlock tooltipBlock = new TooltipBlock();
+
+    /** Marks the current time on today's row; hidden when today is not in the displayed week. */
+    private final Line nowLine = new Line();
+    private String nowDay;
+    private double nowHour;
 
     /**
      * Constructs a {@code TimetableChart} with the specified data.
@@ -79,7 +86,26 @@ public class TimetableChart extends XYChart<Number, String> { // Flip axis types
         loadPersonModulesBlocks(personModulesBlocks);
         loadMeetingBlocks(meetingBlocks);
 
+        nowLine.setStroke(Color.web("#ff5555"));
+        nowLine.setStrokeWidth(2);
+        nowLine.setMouseTransparent(true);
+        nowLine.setVisible(false);
+        getPlotChildren().add(nowLine);
+
         yAxis.toBack();
+    }
+
+    /**
+     * Marks the current time on the row of {@code day}, or hides the marker if {@code day} is null.
+     *
+     * @param day one of {@link Day#VALID_DAYS}, or null
+     * @param hour hours since midnight
+     */
+    public void setNow(String day, double hour) {
+        nowDay = day;
+        nowHour = hour;
+        nowLine.setVisible(day != null);
+        requestChartLayout();
     }
 
     /**
@@ -133,6 +159,21 @@ public class TimetableChart extends XYChart<Number, String> { // Flip axis types
         personModulesBlocks.forEach(block -> block.layout(xAxis, yAxis, blockHeight));
         tooltipBlock.layout(xAxis, yAxis, blockHeight);
         meetingBlocks.forEach(block -> block.layout(xAxis, yAxis, blockHeight));
+        layoutNowLine(xAxis, yAxis, blockHeight);
+    }
+
+    private void layoutNowLine(NumberAxis xAxis, CategoryAxis yAxis, double blockHeight) {
+        if (nowDay == null) {
+            return;
+        }
+        double x = xAxis.getDisplayPosition(nowHour);
+        double y = yAxis.getDisplayPosition(nowDay);
+        nowLine.setStartX(x);
+        nowLine.setEndX(x);
+        // Same vertical extent as the blocks, which are drawn centred on (y - blockHeight / 2)
+        nowLine.setStartY(y - blockHeight);
+        nowLine.setEndY(y);
+        nowLine.toFront();
     }
 
     /**

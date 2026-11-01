@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 import syncsquad.teamsync.model.meeting.Meeting;
+import syncsquad.teamsync.model.meeting.Title;
 
 /**
  * A utility class to help with building Meeting objects.
@@ -20,6 +21,7 @@ public class MeetingBuilder {
     private LocalDate date;
     private LocalTime startTime;
     private LocalTime endTime;
+    private Title title;
 
     /**
      * Creates a {@code MeetingBuilder} with the default details.
@@ -28,6 +30,7 @@ public class MeetingBuilder {
         date = LocalDate.parse(DEFAULT_DATE, DATE_FORMATTER);
         startTime = LocalTime.parse(DEFAULT_START_TIME, TIME_FORMATTER);
         endTime = LocalTime.parse(DEFAULT_END_TIME, TIME_FORMATTER);
+        title = Title.DEFAULT;
     }
 
     /**
@@ -37,6 +40,7 @@ public class MeetingBuilder {
         date = meetingToCopy.getDate();
         startTime = meetingToCopy.getStartTime();
         endTime = meetingToCopy.getEndTime();
+        title = meetingToCopy.getTitle();
     }
 
 
@@ -64,8 +68,16 @@ public class MeetingBuilder {
         return this;
     }
 
+    /**
+     * Sets the {@code title} of the {@code Meeting} that we are building.
+     */
+    public MeetingBuilder withTitle(String title) {
+        this.title = new Title(title);
+        return this;
+    }
+
     public Meeting build() {
-        return new Meeting(date, startTime, endTime);
+        return new Meeting(date, startTime, endTime, title);
     }
 
 }

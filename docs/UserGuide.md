@@ -96,6 +96,7 @@ Indicates critical warnings or large-scale irreversible changes. Always read the
   - [General Commands](#general-commands)
     - [Viewing help](#viewing-help--help)
     - [Changing the week displayed](#changing-the-week-displayed-showdate)
+    - [Setting meeting reminders](#setting-meeting-reminders-reminder)
     - [Clearing all data](#clearing-all-data--clear)
     - [Exiting TeamSync](#exiting-teamsync--exit)
 - [Saving the Data](#saving-the-data)
@@ -488,7 +489,7 @@ Deleting a module is **irreversible**!
 
 Adds a meeting to TeamSync.
 
-**Format**: `meeting add DATE START_TIME END_TIME`
+**Format**: `meeting add DATE START_TIME END_TIME [-t TITLE]`
 
 <div markdown="1" class="alert alert-info">:information_source: **Note**
 
@@ -500,12 +501,18 @@ Adds a meeting to TeamSync.
 * `START_TIME` and `END_TIME` should be in 24-hour HH:MM format.<br>
   **Example**: `14:00` is valid, but `1400` and `2pm` are not
 
+* `TITLE` is optional. It can contain any characters, must not be blank and is at most 50 characters long. Meetings added without a title are titled `Meeting`.
+
 * Unable to add a module? TeamSync does not allow you to add [duplicate](#duplicate-meeting) or [overlapping meetings](#overlapping-meeting).
 </div>
 
 **Example**: `meeting add 06-04-2025 12:00 15:00`
 
 Adds a new meeting on 6 Apr 2025 from 12pm to 3pm.
+
+**Example**: `meeting add 06-04-2025 16:00 17:00 -t Sprint planning`
+
+Adds a new meeting titled "Sprint planning" on 6 Apr 2025 from 4pm to 5pm.
 
 ![Add Meeting Result Annotated](images/AddMeetingResultAnnotated.png)
 
@@ -559,6 +566,33 @@ Format: `showdate DATE`
 Example: `showdate 03-04-2025`
 
 Displays the timetable for 31 Mar 2025 (Mon) to 6 Apr 2025 (Sun).
+
+#### <a href="#table-of-contents" class="head">Setting meeting reminders: `reminder`</a>
+
+Sets how long before each meeting TeamSync reminds you of it, or turns reminders off.
+
+**Format**: `reminder MINUTES` or `reminder off`
+
+<div markdown="1" class="alert alert-info">:information_source: **Info**
+
+* While TeamSync is open, a reminder pops up at the top right `MINUTES` minutes before each meeting starts, showing the meeting's title and time. It stays until you close it.
+
+* Reminders are on by default, 15 minutes before each meeting.
+
+* `MINUTES` is a whole number from 1 to 1440 (24 hours).
+
+* If you add a meeting, or open TeamSync, less than `MINUTES` minutes before a meeting starts, its reminder pops up straight away.
+
+* Each meeting is reminded at most once while TeamSync stays open.
+</div>
+
+**Example**: `reminder 10`
+
+Reminds you of each meeting 10 minutes before it starts.
+
+<div markdown="1" class="alert alert-success">:bulb: **Tip**<br><br>
+A red line in the <a href="#timetable-view" style="color : darkorange; font-weight: bold;">timetable view</a> marks the current time when the current week is displayed.
+</div>
 
 #### <a href="#table-of-contents" class="head">Clearing all data : `clear`</a>
 
@@ -622,10 +656,10 @@ Therefore, **edit the file only if you are confident** that you can update it co
 
 #### <a href="#table-of-contents" class="head">Meeting Commands</a>
 
-| Action               | Format                                 | Example                              |
-|----------------------|----------------------------------------|--------------------------------------|
-| **Add a meeting**    | `meeting add DATE START_TIME END_TIME` | `meeting add 06-04-2025 12:00 15:00` |
-| **Delete a meeting** | `meeting delete INDEX`                 | `meeting delete 1`                   |
+| Action               | Format                                            | Example                                                 |
+|----------------------|---------------------------------------------------|---------------------------------------------------------|
+| **Add a meeting**    | `meeting add DATE START_TIME END_TIME [-t TITLE]` | `meeting add 06-04-2025 12:00 15:00 -t Sprint planning` |
+| **Delete a meeting** | `meeting delete INDEX`                            | `meeting delete 1`                                      |
 
 #### <a href="#table-of-contents" class="head">General Commands</a>
 
@@ -633,6 +667,7 @@ Therefore, **edit the file only if you are confident** that you can update it co
 |-------------------------------|-----------------|-----------------------|
 | **View help**                 | `help`          | `help`                |
 | **Change the week displayed** | `showdate DATE` | `showdate 04-04-2025` |
+| **Set meeting reminders**     | `reminder MINUTES` or `reminder off` | `reminder 10` |
 | **Clear all data**            | `clear`         | `clear`               |
 | **Exit TeamSync**             | `exit`          | `exit`                |
 

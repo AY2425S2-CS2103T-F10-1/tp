@@ -71,6 +71,16 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public int getReminderLeadMinutes() {
+        return userPrefs.getReminderLeadMinutes();
+    }
+
+    @Override
+    public void setReminderLeadMinutes(int reminderLeadMinutes) {
+        userPrefs.setReminderLeadMinutes(reminderLeadMinutes);
+    }
+
+    @Override
     public Path getAddressBookFilePath() {
         return userPrefs.getAddressBookFilePath();
     }

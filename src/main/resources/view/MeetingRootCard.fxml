@@ -7,6 +7,11 @@
 
 <HBox id="cardPane" fx:id="cardPane" spacing="5.0" alignment="CENTER_LEFT" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <Label fx:id="id" />
+   <Label fx:id="titleLabel">
+      <padding>
+         <Insets right="10.0" />
+      </padding>
+   </Label>
    <Label fx:id="dateLabel" text="\$first">
       <HBox.margin>
          <Insets />

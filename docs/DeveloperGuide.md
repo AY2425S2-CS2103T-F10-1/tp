@@ -506,6 +506,7 @@ A Meeting is composed of several attributes:
 - `Date`
 - `Start time`
 - `End time`
+- `Title` (optional in `meeting add`; meetings without one, including those in data files saved before titles existed, are titled `Meeting`)
 
 <div markdown="span" class="alert alert-info">:information_source: **Note:** See the [glossary](#glossary) for how duplicate and overlapping meetings are identified.
 </div>
@@ -526,6 +527,28 @@ The activity diagram is represented below:
 
 <img src="images/MeetingDeleteActivityDiagram.png" width="550"/>
 
+#### Meeting reminders
+
+Reminders are the only behaviour in TeamSync that is driven by time rather than by a command:
+
+1. `MainWindowController` runs a JavaFX `Timeline` that calls `ReminderViewModel#tick(now)` when the window opens and every 30 seconds after.
+2. `ReminderViewModel` updates its `now` property, which `TimetableController` uses to draw the current-time line, and calls `Logic#checkReminders(now)`.
+3. `LogicManager` passes the meeting list and the reminder lead time (stored in `UserPrefs` and set by the `reminder` command) to `ReminderService`, which returns the meetings due for a reminder.
+4. `ReminderViewModel` turns each due meeting into a message, and `ReminderToastsController` shows one toast per message until the user closes it.
+
+`ReminderService` reminds a meeting at the first check whose time falls in `[start - lead time, start)`, and remembers which meetings it has reminded so each is reminded once.
+
+**Design considerations:**
+
+* **Aspect: which thread ticks**
+  * **Alternative 1 (current choice):** A JavaFX `Timeline`. Ticks run on the JavaFX application thread, the same thread that runs commands, so reading the meeting list needs no locking.
+  * **Alternative 2:** A `ScheduledExecutorService`. Ticks would run on a background thread and would need to hand results back with `Platform.runLater` and take care not to read the meeting list while a command changes it.
+* **Aspect: when a meeting is due**
+  * **Alternative 1 (current choice):** Due at the first check inside `[start - lead time, start)`, remembering reminded meetings. A meeting added, or an app opened, after its reminder time but before it starts is still reminded.
+  * **Alternative 2:** Due only if its reminder time falls between the previous check and this one. This needs no memory of reminded meetings, but silently skips the cases above.
+* **Aspect: where the current time comes from**
+  * `ReminderService` and `ReminderViewModel` take the current time as a parameter instead of reading the clock, so tests can check any time, such as a reminder that falls on the day before a meeting just after midnight.
+
 ### General Commands
 
 #### Viewing help
@@ -539,6 +562,10 @@ The command `help` shows a message explaining how to access the user guide.
 The command `showdate` changes the week displayed in the timetable view in TeamSync.
 
 <img src="images/ShowDateCommandSequenceDiagram.png" width="750"/>
+
+#### Setting meeting reminders
+
+The command `reminder` sets the reminder lead time in `UserPrefs`, or sets it to 0 to turn reminders off. See [Meeting reminders](#meeting-reminders) for how reminders are shown.
 
 #### Clearing all data
 

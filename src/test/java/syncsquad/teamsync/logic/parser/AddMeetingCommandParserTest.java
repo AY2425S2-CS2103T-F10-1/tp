@@ -14,15 +14,18 @@ import static syncsquad.teamsync.logic.commands.CommandTestUtil.START_TIME_DESC_
 import static syncsquad.teamsync.logic.commands.CommandTestUtil.VALID_DATE_SEP_MEETING;
 import static syncsquad.teamsync.logic.commands.CommandTestUtil.VALID_END_TIME_SEP_MEETING;
 import static syncsquad.teamsync.logic.commands.CommandTestUtil.VALID_START_TIME_SEP_MEETING;
+import static syncsquad.teamsync.logic.parser.CliSyntax.PREFIX_TITLE;
 import static syncsquad.teamsync.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static syncsquad.teamsync.logic.parser.CommandParserTestUtil.assertParseSuccess;
 import static syncsquad.teamsync.testutil.TypicalAddressBook.SEP_MEETING;
 
 import org.junit.jupiter.api.Test;
 
+import syncsquad.teamsync.logic.Messages;
 import syncsquad.teamsync.logic.commands.meeting.AddMeetingCommand;
 import syncsquad.teamsync.logic.parser.meeting.AddMeetingCommandParser;
 import syncsquad.teamsync.model.meeting.Meeting;
+import syncsquad.teamsync.model.meeting.Title;
 import syncsquad.teamsync.testutil.MeetingBuilder;
 
 public class AddMeetingCommandParserTest {
@@ -35,6 +38,33 @@ public class AddMeetingCommandParserTest {
         // whitespace only preamble
         assertParseSuccess(parser, PREAMBLE_WHITESPACE + DATE_DESC_SEP_MEETING + START_TIME_DESC_SEP_MEETING
                 + END_TIME_DESC_SEP_MEETING, new AddMeetingCommand(expectedMeeting));
+    }
+
+    @Test
+    public void parse_title_success() {
+        Meeting expectedMeeting = new MeetingBuilder(SEP_MEETING).withTitle("Sprint planning - week 9").build();
+        assertParseSuccess(parser, DATE_DESC_SEP_MEETING + START_TIME_DESC_SEP_MEETING + END_TIME_DESC_SEP_MEETING
+                + " -t  Sprint planning - week 9 ", new AddMeetingCommand(expectedMeeting));
+    }
+
+    @Test
+    public void parse_invalidTitle_failure() {
+        String dateAndTimes = DATE_DESC_SEP_MEETING + START_TIME_DESC_SEP_MEETING + END_TIME_DESC_SEP_MEETING;
+
+        // blank title
+        assertParseFailure(parser, dateAndTimes + " -t ", Title.MESSAGE_CONSTRAINTS);
+
+        // longer than the limit
+        assertParseFailure(parser, dateAndTimes + " -t " + "a".repeat(Title.MAX_LENGTH + 1),
+                Title.MESSAGE_CONSTRAINTS);
+
+        // two titles
+        assertParseFailure(parser, dateAndTimes + " -t Standup -t Retro",
+                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_TITLE));
+
+        // title before the date and times
+        assertParseFailure(parser, " -t Standup" + dateAndTimes,
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddMeetingCommand.MESSAGE_USAGE));
     }
 
     @Test

@@ -24,16 +24,18 @@ public class Meeting implements Comparable<Meeting> {
     private final LocalDate date;
     private final LocalTime startTime;
     private final LocalTime endTime;
+    private final Title title;
 
     /**
-     * Creates a Meeting with the specified date, start time and end time.
+     * Creates a Meeting with the specified date, start time, end time and title.
      * Every field must be present and not null.
      */
-    public Meeting(LocalDate date, LocalTime startTime, LocalTime endTime) {
-        requireAllNonNull(date, startTime, endTime);
+    public Meeting(LocalDate date, LocalTime startTime, LocalTime endTime, Title title) {
+        requireAllNonNull(date, startTime, endTime, title);
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.title = title;
     }
 
     public String getDay() {
@@ -100,6 +102,20 @@ public class Meeting implements Comparable<Meeting> {
     }
 
     /**
+     * Returns the title of the meeting.
+     */
+    public Title getTitle() {
+        return this.title;
+    }
+
+    /**
+     * Returns the date and time at which the meeting starts.
+     */
+    public LocalDateTime getStartDateTime() {
+        return LocalDateTime.of(date, startTime);
+    }
+
+    /**
      * Returns true if both meetings overlap in terms of timing.
      * Both start and end time are considered to be non-inclusive,
      * i.e. endTime of 12pm and startTime of 12pm of another meeting is allowed.
@@ -124,12 +140,12 @@ public class Meeting implements Comparable<Meeting> {
 
         Meeting otherMeeting = (Meeting) other;
         return date.equals(otherMeeting.date) && startTime.equals(otherMeeting.startTime)
-                && endTime.equals(otherMeeting.endTime);
+                && endTime.equals(otherMeeting.endTime) && title.equals(otherMeeting.title);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(date, startTime, endTime);
+        return Objects.hash(date, startTime, endTime, title);
     }
 
     @Override
@@ -138,6 +154,7 @@ public class Meeting implements Comparable<Meeting> {
                 .add("date", date)
                 .add("startTime", startTime)
                 .add("endTime", endTime)
+                .add("title", title)
                 .toString();
     }
 
@@ -147,8 +164,6 @@ public class Meeting implements Comparable<Meeting> {
             throw new NullPointerException();
         }
 
-        LocalDateTime dateTime = LocalDateTime.of(this.date, this.startTime);
-        LocalDateTime otherDateTime = LocalDateTime.of(other.date, other.startTime);
-        return dateTime.compareTo(otherDateTime);
+        return getStartDateTime().compareTo(other.getStartDateTime());
     }
 }

@@ -44,8 +44,8 @@ public class MeetingTest {
         LocalDate date = LocalDate.parse("5-4-2025", DATE_FORMATTER);
         LocalTime startTime = LocalTime.parse("14:00", TIME_FORMATTER);
         LocalTime endTime = LocalTime.parse("15:00", TIME_FORMATTER);
-        Meeting meeting = new Meeting(date, startTime, endTime);
-        assertEquals(Objects.hash(date, startTime, endTime), meeting.hashCode());
+        Meeting meeting = new Meeting(date, startTime, endTime, Title.DEFAULT);
+        assertEquals(Objects.hash(date, startTime, endTime, Title.DEFAULT), meeting.hashCode());
     }
 
     @Test
@@ -77,12 +77,17 @@ public class MeetingTest {
         // different end time -> returns false
         editedJanMeeting = new MeetingBuilder(JAN_MEETING).withEndTime(VALID_END_TIME_SEP_MEETING).build();
         assertFalse(JAN_MEETING.equals(editedJanMeeting));
+
+        // different title -> returns false
+        editedJanMeeting = new MeetingBuilder(JAN_MEETING).withTitle("Retrospective").build();
+        assertFalse(JAN_MEETING.equals(editedJanMeeting));
     }
 
     @Test
     public void toStringMethod() {
         String expected = Meeting.class.getCanonicalName() + "{date=" + JAN_MEETING.getDate()
-                + ", startTime=" + JAN_MEETING.getStartTime() + ", endTime=" + JAN_MEETING.getEndTime() + "}";
+                + ", startTime=" + JAN_MEETING.getStartTime() + ", endTime=" + JAN_MEETING.getEndTime()
+                + ", title=" + JAN_MEETING.getTitle() + "}";
         assertEquals(expected, JAN_MEETING.toString());
     }
 }

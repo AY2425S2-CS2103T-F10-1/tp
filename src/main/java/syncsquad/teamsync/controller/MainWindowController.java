@@ -1,22 +1,30 @@
 package syncsquad.teamsync.controller;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import atlantafx.base.controls.ModalPane;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import syncsquad.teamsync.ResizeHelper;
 import syncsquad.teamsync.commons.core.GuiSettings;
 import syncsquad.teamsync.viewmodel.MainViewModel;
+import syncsquad.teamsync.viewmodel.ReminderViewModel;
 
 /**
  * The Main Window. Provides the basic application layout containing
@@ -25,6 +33,7 @@ import syncsquad.teamsync.viewmodel.MainViewModel;
 public class MainWindowController extends UiPart<Stage> {
 
     private static final String FXML = "MainWindow.fxml";
+    private static final Duration CLOCK_TICK_INTERVAL = Duration.seconds(30);
 
     private Stage primaryStage;
 
@@ -180,8 +189,8 @@ public class MainWindowController extends UiPart<Stage> {
             this.viewModel.getMeetingListViewModel());
         meetingListPanelPlaceholder.getChildren().add(meetingListPanel.getRoot());
 
-        TimetableController timetable = new TimetableController(
-                this.viewModel.getPersonListViewModel(), this.viewModel.getMeetingListViewModel());
+        TimetableController timetable = new TimetableController(this.viewModel.getPersonListViewModel(),
+                this.viewModel.getMeetingListViewModel(), this.viewModel.getReminderViewModel().nowProperty());
         timetablePlaceholder.getChildren().add(timetable.getRoot());
 
         ResultDisplayController resultDisplay = new ResultDisplayController(
@@ -197,6 +206,27 @@ public class MainWindowController extends UiPart<Stage> {
         commandBoxPlaceholder.getChildren().add(commandBox.getRoot());
 
         ResizeHelper.addResizeListener(primaryStage, isMaximized::get);
+
+        ReminderToastsController reminderToasts = new ReminderToastsController(
+            this.viewModel.getReminderViewModel());
+        mainStackPane.getChildren().add(reminderToasts.getRoot());
+        StackPane.setAlignment(reminderToasts.getRoot(), Pos.TOP_RIGHT);
+        StackPane.setMargin(reminderToasts.getRoot(), new Insets(60, 24, 0, 0));
+
+        startClock();
+    }
+
+    /**
+     * Advances the {@code ReminderViewModel}'s clock now and every {@code CLOCK_TICK_INTERVAL} after.
+     * The ticks run on the JavaFX application thread, so they never race with commands changing the meetings.
+     */
+    private void startClock() {
+        ReminderViewModel reminderViewModel = viewModel.getReminderViewModel();
+        Timeline clock = new Timeline(new KeyFrame(CLOCK_TICK_INTERVAL,
+                event -> reminderViewModel.tick(LocalDateTime.now())));
+        clock.setCycleCount(Animation.INDEFINITE);
+        reminderViewModel.tick(LocalDateTime.now());
+        clock.play();
     }
 
     /**
