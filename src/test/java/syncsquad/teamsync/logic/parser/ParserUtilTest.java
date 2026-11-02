@@ -8,7 +8,6 @@ import static syncsquad.teamsync.testutil.TypicalIndexes.INDEX_FIRST;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.Year;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -227,17 +226,17 @@ public class ParserUtilTest {
     @Test
     public void parseDate_validDate_returnsDate() throws Exception {
         final String validDate = "18-11-2025";
-        final String validDateWithoutYear = "06-06-2025";
+        final String validDateWithLeadingZeros = "06-06-2025";
         final String validDateWithoutLeadingZero = "7-5-2025";
         final String validDateLeapYear = "29-02-2024";
 
         final LocalDate expectedValidDate = LocalDate.of(2025, 11, 18);
-        final LocalDate expectedValidDateWithoutYear = LocalDate.of(Year.now().getValue(), 6, 6);
+        final LocalDate expectedValidDateWithLeadingZeros = LocalDate.of(2025, 6, 6);
         final LocalDate expectedValidDateWithoutTrailingZero = LocalDate.of(2025, 5, 7);
         final LocalDate expectedValidDateLeapYear = LocalDate.of(2024, 2, 29);
 
         assertEquals(expectedValidDate, ParserUtil.parseDate(validDate));
-        assertEquals(expectedValidDateWithoutYear, ParserUtil.parseDate(validDateWithoutYear));
+        assertEquals(expectedValidDateWithLeadingZeros, ParserUtil.parseDate(validDateWithLeadingZeros));
         assertEquals(expectedValidDateWithoutTrailingZero, ParserUtil.parseDate(validDateWithoutLeadingZero));
         assertEquals(expectedValidDateLeapYear, ParserUtil.parseDate(validDateLeapYear));
     }
