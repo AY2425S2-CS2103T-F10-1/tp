@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="toastContainer" maxHeight="-Infinity" maxWidth="-Infinity" pickOnBounds="false" spacing="8.0"
+    styleClass="reminder-toast-container" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+  <padding>
+    <Insets right="16.0" top="56.0" />
+  </padding>
+</VBox>
