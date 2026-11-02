@@ -526,6 +526,21 @@ The activity diagram is represented below:
 
 <img src="images/MeetingDeleteActivityDiagram.png" width="550"/>
 
+#### Meeting reminders
+
+TeamSync shows a toast 15 minutes before each meeting while the app is open. This is the only time-driven behaviour in the app; everything else runs only when a command is entered.
+
+- `ReminderViewModel` decides which meetings are due. A meeting is due when the current time is within `[start - 15 min, start)`, and each meeting is reminded at most once. The lead time is the constant `ReminderViewModel.DEFAULT_LEAD_TIME`. The view model reads the time from an injected `java.time.Clock`, so tests can control it.
+- `ReminderToastController` runs a JavaFX `Timeline` that calls `checkReminders()` every 30 seconds, and shows an AtlantaFX `Notification` for each meeting in `activeReminders`. Closing a toast calls `dismiss(meeting)`. The timer stops when the main window is hidden.
+- `ReminderViewModel` also re-checks whenever the meeting list changes, so adding or deleting a meeting inside the window updates the toasts immediately.
+
+<img src="images/ReminderSequenceDiagram.png" width="750"/>
+
+**Design considerations:**
+
+- **Window check instead of an exact fire time:** checking whether the current time is inside the window, rather than scheduling one timer per meeting at `start - 15 min`, also covers opening the app, or adding a meeting, after the reminder time but before the meeting starts. It also keeps working after the computer wakes from sleep. The cost is that a toast can appear up to 30 seconds late.
+- **JavaFX `Timeline` instead of a background thread:** the `Timeline` runs on the JavaFX application thread, the same thread that runs commands, so reading the meeting list needs no locking.
+
 ### General Commands
 
 #### Viewing help

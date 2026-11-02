@@ -93,6 +93,7 @@ Indicates critical warnings or large-scale irreversible changes. Always read the
   - [Meeting Commands](#meeting-commands)
     - [Adding a meeting](#adding-a-meeting-meeting-add)
     - [Deleting a meeting](#deleting-a-meeting-meeting-delete)
+    - [Meeting reminders](#meeting-reminders)
   - [General Commands](#general-commands)
     - [Viewing help](#viewing-help--help)
     - [Changing the week displayed](#changing-the-week-displayed-showdate)
@@ -527,6 +528,21 @@ Deletes the first meeting in TeamSync, as shown in the <a href="#meeting-view" s
 
 <div markdown="1" class="alert alert-warning">:exclamation: **Warning**<br><br>
 Deleting a meeting is **irreversible**!
+</div>
+
+#### <a href="#table-of-contents" class="head">Meeting reminders</a>
+
+While TeamSync is open, it reminds you of each meeting **15 minutes** before it starts. A toast appears at the top right of the window, e.g. `Meeting on 06-04-2025 12:00-15:00 starts in 15 min`.
+
+<div markdown="1" class="alert alert-info">:information_source: **Note**
+
+* The toast stays until you close it with its close button, or until the meeting starts.
+
+* If you open TeamSync, or add a meeting, less than 15 minutes before the meeting starts, the toast appears right away.
+
+* Deleting a meeting also removes its toast.
+
+* No reminder is shown for a meeting that has already started.
 </div>
 
 ---

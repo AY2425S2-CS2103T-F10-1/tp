@@ -1,0 +1,40 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box "View" UI_COLOR_T1
+Participant ":Timeline" as Timeline UI_COLOR
+Participant ":ReminderToastController" as ReminderToastController UI_COLOR
+Participant ":Notification" as Notification UI_COLOR
+end box
+
+box "ViewModel" VIEW_MODEL_COLOR_T1
+Participant ":ReminderViewModel" as ReminderViewModel VIEW_MODEL_COLOR
+end box
+
+[-[UI_COLOR]> Timeline : every 30 s
+activate Timeline UI_COLOR
+
+Timeline -[UI_COLOR]> ReminderViewModel : checkReminders()
+activate ReminderViewModel VIEW_MODEL_COLOR
+
+ReminderViewModel -[VIEW_MODEL_COLOR]> ReminderViewModel : find meetings starting\nwithin 15 min
+
+ReminderViewModel -[VIEW_MODEL_COLOR]> ReminderToastController : activeReminders changed
+activate ReminderToastController UI_COLOR
+
+create Notification
+ReminderToastController -[UI_COLOR]> Notification
+activate Notification UI_COLOR
+Notification --[UI_COLOR]> ReminderToastController
+deactivate Notification
+
+ReminderToastController --[UI_COLOR]> ReminderViewModel
+deactivate ReminderToastController
+
+ReminderViewModel --[VIEW_MODEL_COLOR]> Timeline
+deactivate ReminderViewModel
+
+deactivate Timeline
+
+@enduml

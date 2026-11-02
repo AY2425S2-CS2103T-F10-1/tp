@@ -14,6 +14,7 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import syncsquad.teamsync.ResizeHelper;
 import syncsquad.teamsync.commons.core.GuiSettings;
 import syncsquad.teamsync.viewmodel.MainViewModel;
@@ -162,6 +163,14 @@ public class MainWindowController extends UiPart<Stage> {
      * Fills up all the placeholders of this window.
      */
     void fillInnerParts() {
+        // Added before the help modal pane so that the help dialog covers the toasts
+        ReminderToastController reminderToast = new ReminderToastController(
+            this.viewModel.getReminderViewModel());
+        mainStackPane.getChildren().add(reminderToast.getRoot());
+        StackPane.setAlignment(reminderToast.getRoot(), javafx.geometry.Pos.TOP_RIGHT);
+        primaryStage.addEventHandler(WindowEvent.WINDOW_HIDDEN, event -> reminderToast.stop());
+        reminderToast.start();
+
         ModalPane helpModalPane = new ModalPane();
         mainStackPane.getChildren().add(helpModalPane);
         StackPane.setAlignment(helpModalPane, javafx.geometry.Pos.CENTER);
